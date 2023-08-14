@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lrz141319.grocerylistapp.EditToDoItemActivity">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="150dp"
+        android:layout_height="37dp"
+        android:text="@string/edit"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/etEditItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="101dp"
+        android:layout_marginTop="34dp"
+        android:ems="10">
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etEditItem"
+        android:layout_alignLeft="@+id/etEditItem"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="26dp"
+        android:onClick="onSubmit"
+        android:text="Save" />
+
+</RelativeLayout>
+
+
