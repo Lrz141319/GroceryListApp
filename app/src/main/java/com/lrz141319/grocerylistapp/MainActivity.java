@@ -16,7 +16,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity
     ArrayAdapter<String> m_ItemsAdapter;
     EditText m_AddItemEditText;
     TextView m_TxtDate;
+    String m_FileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,17 +41,17 @@ public class MainActivity extends AppCompatActivity
         m_ListView = (ListView) findViewById(R.id.lstView);
         m_TxtDate = (TextView) findViewById(R.id.txtDate);
         m_AddItemEditText = (EditText) findViewById(R.id.txtNewItem);
-        m_Items = new ArrayList<String>();
-        m_Items.add("Grocery one");
-        m_Items.add("Grocery two");
-        m_ItemsAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, m_Items);
-        m_ListView.setAdapter(m_ItemsAdapter);
 
         Bundle bundle = getIntent().getExtras();
         String date = bundle != null ? bundle.getString("date") : null;
         m_TxtDate.setText(date);
-        Log.i("MainActivity", "Setdate" + date);
+        m_FileName = date + ".txt";
+
+        ReadItemsFromFile(m_FileName);
+
+        m_ItemsAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, m_Items);
+        m_ListView.setAdapter(m_ItemsAdapter);
 
         this.SetupListViewListener();
     }
@@ -59,6 +63,7 @@ public class MainActivity extends AppCompatActivity
         {
             m_ItemsAdapter.add(toAddString);
             m_AddItemEditText.setText("");
+            SaveItemsToFile(m_FileName);
         }
     }
     private void SetupListViewListener()
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity
                             {
                                 m_Items.remove(position);
                                 m_ItemsAdapter.notifyDataSetChanged();
+                                SaveItemsToFile(m_FileName);
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
@@ -124,7 +130,41 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(getApplicationContext(), "Updated: " + editedItem,
                             Toast.LENGTH_SHORT).show();
                     m_ItemsAdapter.notifyDataSetChanged();
+                    SaveItemsToFile(m_FileName);
                 }
             }
     );
+
+    private void ReadItemsFromFile(String fileName)
+    {
+        File filesDir = getFilesDir();
+        File groceryFile = new File(filesDir, fileName);
+        if(!groceryFile.exists())
+        {
+            m_Items = new ArrayList<String>();
+        }
+        else
+        {
+            try
+            {
+                m_Items = new ArrayList<String>(FileUtils.readLines(groceryFile));
+            }catch(IOException e)
+            {
+                m_Items = new ArrayList<String>();
+            }
+        }
+    }
+
+    private void SaveItemsToFile(String fileName)
+    {
+        File filesDir = getFilesDir();
+        File groceryFile = new File(filesDir, fileName);
+        try
+        {
+            FileUtils.writeLines(groceryFile, m_Items);
+        }catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }
