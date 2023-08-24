@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
 
-public class EditToDoItemActivity extends Activity
+
+public class EditToDoItemActivity extends AppCompatActivity
 {
 	public int Position = 0;
 	EditText m_EditTxt;

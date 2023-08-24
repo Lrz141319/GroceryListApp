@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity
     ArrayList<String> m_Items;
     ArrayAdapter<String> m_ItemsAdapter;
     EditText m_AddItemEditText;
+    TextView m_TxtDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -32,13 +35,19 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         m_ListView = (ListView) findViewById(R.id.lstView);
+        m_TxtDate = (TextView) findViewById(R.id.txtDate);
         m_AddItemEditText = (EditText) findViewById(R.id.txtNewItem);
         m_Items = new ArrayList<String>();
-        m_Items.add("item one");
-        m_Items.add("item two");
+        m_Items.add("Grocery one");
+        m_Items.add("Grocery two");
         m_ItemsAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, m_Items);
         m_ListView.setAdapter(m_ItemsAdapter);
+
+        Bundle bundle = getIntent().getExtras();
+        String date = bundle != null ? bundle.getString("date") : null;
+        m_TxtDate.setText(date);
+        Log.i("MainActivity", "Setdate" + date);
 
         this.SetupListViewListener();
     }
